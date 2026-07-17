@@ -1,0 +1,10 @@
+node_modules/
+dist/
+build/
+.env
+.env.local
+*.log
+.DS_Store
+server/data.sqlite
+server/data.sqlite-*
+.claude/settings.local.json

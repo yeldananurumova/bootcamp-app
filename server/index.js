@@ -1,0 +1,29 @@
+import express from 'express'
+import cors from 'cors'
+import testCasesRouter from './routes/test-cases.js'
+import suitesRouter from './routes/suites.js'
+import bugsRouter from './routes/bugs.js'
+
+const app = express()
+const PORT = process.env.PORT || 5050
+
+app.use(cors())
+app.use(express.json())
+
+app.get('/api/health', (req, res) => {
+  res.json({ success: true, data: { status: 'ok' }, error: null })
+})
+
+app.use('/api/test-cases', testCasesRouter)
+app.use('/api/suites', suitesRouter)
+app.use('/api/bugs', bugsRouter)
+
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.error(err)
+  res.status(500).json({ success: false, data: null, error: 'internal server error' })
+})
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`)
+})
