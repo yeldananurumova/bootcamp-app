@@ -8,3 +8,12 @@ export async function getDashboardMetrics() {
   }
   return body.data
 }
+
+export async function getDashboardTrends() {
+  const res = await fetch(`${BASE_URL}/trends`)
+  const body = await res.json()
+  if (!body.success) {
+    throw new Error(body.error || 'Request failed')
+  }
+  return body.data
+}

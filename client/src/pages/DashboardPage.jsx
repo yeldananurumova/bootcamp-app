@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
-import { getDashboardMetrics } from '../api/dashboard.js'
+import { getDashboardMetrics, getDashboardTrends } from '../api/dashboard.js'
 import StatusBadge from '../components/StatusBadge.jsx'
+import PassRateTrendChart from '../components/charts/PassRateTrendChart.jsx'
+import BugsOpenedClosedChart from '../components/charts/BugsOpenedClosedChart.jsx'
+import TestCoverageDonutChart from '../components/charts/TestCoverageDonutChart.jsx'
 
 const REFRESH_INTERVAL_MS = 30000
 
@@ -45,16 +48,18 @@ function DashboardPage() {
   const [metrics, setMetrics] = useState(null)
   const [recentRuns, setRecentRuns] = useState([])
   const [recentActivity, setRecentActivity] = useState([])
+  const [trends, setTrends] = useState(null)
   const [initialLoading, setInitialLoading] = useState(true)
   const [error, setError] = useState(null)
 
   async function load(isInitial) {
     if (isInitial) setInitialLoading(true)
     try {
-      const data = await getDashboardMetrics()
-      setMetrics(data.metrics)
-      setRecentRuns(data.recentRuns)
-      setRecentActivity(data.recentActivity)
+      const [metricsData, trendsData] = await Promise.all([getDashboardMetrics(), getDashboardTrends()])
+      setMetrics(metricsData.metrics)
+      setRecentRuns(metricsData.recentRuns)
+      setRecentActivity(metricsData.recentActivity)
+      setTrends(trendsData)
       setError(null)
     } catch (err) {
       setError(err.message)
@@ -111,6 +116,23 @@ function DashboardPage() {
               <p className="metric-value">{formatDuration(metrics.avgRunDurationSeconds)}</p>
             </div>
           </div>
+
+          {trends && (
+            <div className="charts-grid">
+              <div className="chart-card">
+                <h3>Pass Rate Trend (Last 10 Runs)</h3>
+                <PassRateTrendChart data={trends.passRateTrend} />
+              </div>
+              <div className="chart-card">
+                <h3>Bugs Opened vs Closed (Last 8 Weeks)</h3>
+                <BugsOpenedClosedChart data={trends.bugsPerWeek} />
+              </div>
+              <div className="chart-card">
+                <h3>Test Coverage by Status</h3>
+                <TestCoverageDonutChart data={trends.testCoverage} />
+              </div>
+            </div>
+          )}
 
           <h2>Recent Test Runs</h2>
           <table className="test-cases-table">
