@@ -408,3 +408,85 @@ button:disabled {
   border: 1px solid #d3d6db;
   border-radius: 6px;
 }
+
+.metric-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  background: #ffffff;
+  border: 1px solid #e2e4e8;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.metric-label {
+  color: #6b7280;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0 0 0.5rem;
+}
+
+.metric-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #d3d6db;
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.result-actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.result-actions button {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+.dashboard-empty {
+  color: #6b7280;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.skeleton {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  background: #e5e7eb;
+  border-radius: 6px;
+}
+
+.skeleton-card {
+  height: 5rem;
+}
+
+.skeleton-row {
+  height: 1.5rem;
+  margin-bottom: 0.5rem;
+}

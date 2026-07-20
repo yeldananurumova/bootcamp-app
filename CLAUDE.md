@@ -29,6 +29,14 @@ Express server (`server/`, entry `server/index.js`) + React client (`client/`, s
 - **Status** — draft, ready, in-progress, passed, or failed.
 - **Cases** — an ordered list of test cases belonging to the suite.
 
+## Test Run Fields
+- **Suite** — the suite this run was created from; its cases are snapshotted at creation time.
+- **Status** — in-progress or completed. Becomes completed automatically once every case in the run has a recorded result.
+- **Pass / Fail / Skip Counts** — running totals, kept in sync as results are recorded or changed.
+- **Result** — per case: passed, failed, or skipped (unset until recorded).
+- **Notes** — free text recorded alongside a result.
+- Marking a case **failed** opens a GitHub issue in the configured repo (title + notes) and stores the issue URL on that result.
+
 ## Bug Report Fields
 - **Title** — short, specific name for the bug.
 - **Description** — a general description of the bug.

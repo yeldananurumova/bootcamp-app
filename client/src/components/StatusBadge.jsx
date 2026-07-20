@@ -9,6 +9,7 @@ export const STATUS_COLORS = {
   resolved: { background: '#bbead0', color: '#0f5c2e' },
   closed: { background: '#e3e6ea', color: '#4a5058' },
   reopened: { background: '#ede2fd', color: '#5b21b6' },
+  completed: { background: '#bbead0', color: '#0f5c2e' },
 }
 
 function StatusBadge({ status }) {

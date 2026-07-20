@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/yeldanaaliyeva/Documents/bootcamp-app/.claude/hooks/protect-env.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/yeldanaaliyeva/Documents/bootcamp-app/.claude/hooks/check-response-shape.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/yeldanaaliyeva/Documents/bootcamp-app/.claude/hooks/check-severity-enum.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
