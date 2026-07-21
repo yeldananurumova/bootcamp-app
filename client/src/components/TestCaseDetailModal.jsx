@@ -1,11 +1,24 @@
+import { useRef } from 'react'
 import SeverityBadge from './SeverityBadge.jsx'
 import StatusBadge from './StatusBadge.jsx'
+import { useModalA11y } from '../hooks/useModalA11y.js'
 
 function TestCaseDetailModal({ testCase, onClose, onEdit }) {
+  const modalRef = useRef(null)
+  useModalA11y(modalRef, onClose)
+
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2>{testCase.title}</h2>
+      <div
+        className="modal"
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="test-case-detail-modal-title"
+        tabIndex={-1}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2 id="test-case-detail-modal-title">{testCase.title}</h2>
 
         <div className="detail-view">
           <div className="detail-row">

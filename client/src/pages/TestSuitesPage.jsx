@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { listSuites } from '../api/suites.js'
+import { onActivateKey } from '../utils/a11y.js'
 import SuiteFormModal from '../components/SuiteFormModal.jsx'
 import StatusBadge from '../components/StatusBadge.jsx'
 
@@ -52,7 +53,7 @@ function TestSuitesPage() {
       </div>
 
       <div className="toolbar">
-        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+        <select aria-label="Filter by status" value={status} onChange={(e) => setStatus(e.target.value)}>
           <option value="">All statuses</option>
           {STATUSES.map((s) => (
             <option key={s} value={s}>
@@ -90,7 +91,11 @@ function TestSuitesPage() {
               <tr
                 key={suite.id}
                 className="clickable-row"
+                tabIndex={0}
+                role="button"
+                aria-label={`View ${suite.name}`}
                 onClick={() => navigate(`/test-suites/${suite.id}`)}
+                onKeyDown={onActivateKey(() => navigate(`/test-suites/${suite.id}`))}
               >
                 <td>{suite.name}</td>
                 <td>{suite.feature}</td>

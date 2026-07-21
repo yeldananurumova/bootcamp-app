@@ -1,7 +1,7 @@
 const COLORS = {
   Critical: { background: '#fde2e1', color: '#9a1f1f' },
   Major: { background: '#fde8cc', color: '#9a5b1f' },
-  Minor: { background: '#fdf3c7', color: '#8a6d1f' },
+  Minor: { background: '#fdf3c7', color: '#7a5f16' },
   Trivial: { background: '#e3e6ea', color: '#4a5058' },
 }
 

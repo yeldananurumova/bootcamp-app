@@ -137,7 +137,7 @@ const RESULT_COLORS = {
 const SEVERITY_COLORS = {
   Critical: { background: '#fde2e1', color: '#9a1f1f' },
   Major: { background: '#fde8cc', color: '#9a5b1f' },
-  Minor: { background: '#fdf3c7', color: '#8a6d1f' },
+  Minor: { background: '#fdf3c7', color: '#7a5f16' },
   Trivial: { background: '#e3e6ea', color: '#4a5058' },
 }
 
@@ -175,9 +175,9 @@ function buildReportHtml(report) {
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    font-family: system-ui, -apple-system, sans-serif;
-    background: #f7f7f8;
-    color: #1a1a1a;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+    background: #f7f6f4;
+    color: #22252a;
     padding: 2rem;
   }
   .report {
@@ -197,7 +197,7 @@ function buildReportHtml(report) {
     margin-bottom: 2rem;
   }
   .metric-card {
-    background: #f7f7f8;
+    background: #f7f6f4;
     border: 1px solid #e2e4e8;
     border-radius: 8px;
     padding: 1rem;
@@ -226,13 +226,13 @@ function buildReportHtml(report) {
     font-size: 0.8rem;
     font-weight: 600;
   }
-  a { color: #2563eb; }
+  a { color: #0d5c56; }
   @media print {
     body { background: #ffffff; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .report { border: none; border-radius: 0; max-width: none; padding: 0.5in; }
     table { page-break-inside: auto; }
     tr { page-break-inside: avoid; }
-    a { color: #1a1a1a; text-decoration: none; }
+    a { color: #22252a; text-decoration: none; }
   }
 </style>
 </head>

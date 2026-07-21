@@ -185,6 +185,7 @@ function BugDetailPage() {
       <h2>Change Status</h2>
       <form className="status-change-form" onSubmit={handleStatusSubmit}>
         <select
+          aria-label="Change status to"
           value={statusChoice}
           onChange={(e) => setStatusChoice(e.target.value)}
           style={{
@@ -201,6 +202,7 @@ function BugDetailPage() {
         </select>
         <input
           type="text"
+          aria-label="Optional note about this status change"
           placeholder="Optional note about this change..."
           value={statusMessage}
           onChange={(e) => setStatusMessage(e.target.value)}
@@ -234,6 +236,7 @@ function BugDetailPage() {
       <form className="add-comment-form" onSubmit={handleAddComment}>
         <textarea
           rows={2}
+          aria-label="Add a comment"
           placeholder="Add a comment..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}

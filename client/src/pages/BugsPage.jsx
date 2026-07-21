@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { listBugs } from '../api/bugs.js'
+import { onActivateKey } from '../utils/a11y.js'
 import SeverityBadge from '../components/SeverityBadge.jsx'
 import PriorityBadge from '../components/PriorityBadge.jsx'
 import StatusBadge from '../components/StatusBadge.jsx'
@@ -90,12 +91,13 @@ function BugsPage() {
       <div className="toolbar">
         <input
           type="text"
+          aria-label="Search by title or description"
           placeholder="Search by title or description..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+        <select aria-label="Filter by status" value={status} onChange={(e) => setStatus(e.target.value)}>
           <option value="">All statuses</option>
           {STATUSES.map((s) => (
             <option key={s} value={s}>
@@ -104,7 +106,7 @@ function BugsPage() {
           ))}
         </select>
 
-        <select value={severity} onChange={(e) => setSeverity(e.target.value)}>
+        <select aria-label="Filter by severity" value={severity} onChange={(e) => setSeverity(e.target.value)}>
           <option value="">All severities</option>
           {SEVERITIES.map((s) => (
             <option key={s} value={s}>
@@ -120,14 +122,35 @@ function BugsPage() {
         <thead>
           <tr>
             <th>Title</th>
-            <th className="sortable" onClick={() => toggleSort('severity')}>
+            <th
+              className="sortable"
+              tabIndex={0}
+              role="button"
+              aria-sort={sortBy === 'severity' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+              onClick={() => toggleSort('severity')}
+              onKeyDown={onActivateKey(() => toggleSort('severity'))}
+            >
               Severity{sortIndicator('severity')}
             </th>
-            <th className="sortable" onClick={() => toggleSort('priority')}>
+            <th
+              className="sortable"
+              tabIndex={0}
+              role="button"
+              aria-sort={sortBy === 'priority' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+              onClick={() => toggleSort('priority')}
+              onKeyDown={onActivateKey(() => toggleSort('priority'))}
+            >
               Priority{sortIndicator('priority')}
             </th>
             <th>Status</th>
-            <th className="sortable" onClick={() => toggleSort('updatedAt')}>
+            <th
+              className="sortable"
+              tabIndex={0}
+              role="button"
+              aria-sort={sortBy === 'updatedAt' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+              onClick={() => toggleSort('updatedAt')}
+              onKeyDown={onActivateKey(() => toggleSort('updatedAt'))}
+            >
               Updated{sortIndicator('updatedAt')}
             </th>
           </tr>
@@ -145,7 +168,15 @@ function BugsPage() {
           )}
           {!loading &&
             sortedItems.map((bug) => (
-              <tr key={bug.id} className="clickable-row" onClick={() => navigate(`/bugs/${bug.id}`)}>
+              <tr
+                key={bug.id}
+                className="clickable-row"
+                tabIndex={0}
+                role="button"
+                aria-label={`View ${bug.title}`}
+                onClick={() => navigate(`/bugs/${bug.id}`)}
+                onKeyDown={onActivateKey(() => navigate(`/bugs/${bug.id}`))}
+              >
                 <td>{bug.title}</td>
                 <td>
                   <SeverityBadge severity={bug.severity} />

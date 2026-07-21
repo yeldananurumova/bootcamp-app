@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import { listTestCases, deleteTestCase } from '../api/test-cases.js'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { listTestCases, getTestCase, deleteTestCase } from '../api/test-cases.js'
+import { onActivateKey } from '../utils/a11y.js'
 import SeverityBadge from '../components/SeverityBadge.jsx'
 import StatusBadge from '../components/StatusBadge.jsx'
 import TestCaseFormModal from '../components/TestCaseFormModal.jsx'
@@ -18,6 +20,8 @@ function formatDate(iso) {
 }
 
 function TestCasesPage() {
+  const location = useLocation()
+  const navigate = useNavigate()
   const [items, setItems] = useState([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
@@ -51,6 +55,18 @@ function TestCasesPage() {
     load()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, status, sortBy, sortDir, page])
+
+  useEffect(() => {
+    const openTestCaseId = location.state?.openTestCaseId
+    if (!openTestCaseId) return
+
+    navigate(location.pathname, { replace: true, state: null })
+
+    getTestCase(openTestCaseId)
+      .then(setViewingTestCase)
+      .catch((err) => setError(err.message))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state])
 
   function handleSearchChange(value) {
     setSearch(value)
@@ -93,20 +109,26 @@ function TestCasesPage() {
     <div className="test-cases-page">
       <div className="page-header">
         <h1>Test Cases</h1>
-        <button className="primary" onClick={() => setModalState('new')}>
-          + Add Test Case
-        </button>
+        <div className="page-header-actions">
+          <Link className="button-link" to="/test-cases/import">
+            Import CSV
+          </Link>
+          <button className="primary" onClick={() => setModalState('new')}>
+            + Add Test Case
+          </button>
+        </div>
       </div>
 
       <div className="toolbar">
         <input
           type="text"
+          aria-label="Search by title"
           placeholder="Search by title..."
           value={search}
           onChange={(e) => handleSearchChange(e.target.value)}
         />
 
-        <select value={status} onChange={(e) => handleStatusChange(e.target.value)}>
+        <select aria-label="Filter by status" value={status} onChange={(e) => handleStatusChange(e.target.value)}>
           <option value="">All statuses</option>
           {STATUSES.map((s) => (
             <option key={s} value={s}>
@@ -122,11 +144,25 @@ function TestCasesPage() {
         <thead>
           <tr>
             <th>Title</th>
-            <th className="sortable" onClick={() => toggleSort('severity')}>
+            <th
+              className="sortable"
+              tabIndex={0}
+              role="button"
+              aria-sort={sortBy === 'severity' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+              onClick={() => toggleSort('severity')}
+              onKeyDown={onActivateKey(() => toggleSort('severity'))}
+            >
               Severity{sortIndicator('severity')}
             </th>
             <th>Status</th>
-            <th className="sortable" onClick={() => toggleSort('updatedAt')}>
+            <th
+              className="sortable"
+              tabIndex={0}
+              role="button"
+              aria-sort={sortBy === 'updatedAt' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
+              onClick={() => toggleSort('updatedAt')}
+              onKeyDown={onActivateKey(() => toggleSort('updatedAt'))}
+            >
               Updated{sortIndicator('updatedAt')}
             </th>
             <th></th>
@@ -145,7 +181,15 @@ function TestCasesPage() {
           )}
           {!loading &&
             items.map((tc) => (
-              <tr key={tc.id} className="clickable-row" onClick={() => setViewingTestCase(tc)}>
+              <tr
+                key={tc.id}
+                className="clickable-row"
+                tabIndex={0}
+                role="button"
+                aria-label={`View ${tc.title}`}
+                onClick={() => setViewingTestCase(tc)}
+                onKeyDown={onActivateKey(() => setViewingTestCase(tc))}
+              >
                 <td>{tc.title}</td>
                 <td>
                   <SeverityBadge severity={tc.severity} />
@@ -157,6 +201,7 @@ function TestCasesPage() {
                 <td className="row-menu-cell" onClick={(e) => e.stopPropagation()}>
                   <button
                     className="row-menu-trigger"
+                    aria-label="More actions"
                     onClick={() => setOpenMenuId(openMenuId === tc.id ? null : tc.id)}
                   >
                     ⋮

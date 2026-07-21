@@ -192,7 +192,7 @@ function TestSuiteDetailPage() {
               onDrop={() => handleDrop(index)}
               className="draggable-row"
             >
-              <td className="drag-handle">⠿</td>
+              <td className="drag-handle" aria-hidden="true">⠿</td>
               <td>{tc.title}</td>
               <td>
                 <SeverityBadge severity={tc.severity} />
@@ -209,7 +209,11 @@ function TestSuiteDetailPage() {
       </table>
 
       <div className="add-case-row">
-        <select value={selectedCaseId} onChange={(e) => setSelectedCaseId(e.target.value)}>
+        <select
+          aria-label="Add a test case to this suite"
+          value={selectedCaseId}
+          onChange={(e) => setSelectedCaseId(e.target.value)}
+        >
           <option value="">Add a test case...</option>
           {availableCases.map((tc) => (
             <option key={tc.id} value={tc.id}>

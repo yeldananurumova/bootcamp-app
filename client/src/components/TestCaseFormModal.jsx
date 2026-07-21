@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { createTestCase, updateTestCase } from '../api/test-cases.js'
+import { useModalA11y } from '../hooks/useModalA11y.js'
 
 const SEVERITIES = ['Critical', 'Major', 'Minor', 'Trivial']
 const STATUSES = ['draft', 'ready', 'passed', 'failed', 'skipped']
@@ -20,6 +21,8 @@ function TestCaseFormModal({ testCase, onClose, onSaved }) {
   const [form, setForm] = useState(() => toFormState(testCase))
   const [error, setError] = useState(null)
   const [saving, setSaving] = useState(false)
+  const modalRef = useRef(null)
+  useModalA11y(modalRef, onClose)
 
   function update(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -65,8 +68,16 @@ function TestCaseFormModal({ testCase, onClose, onSaved }) {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2>{isEdit ? 'Edit Test Case' : 'New Test Case'}</h2>
+      <div
+        className="modal"
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="test-case-form-modal-title"
+        tabIndex={-1}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2 id="test-case-form-modal-title">{isEdit ? 'Edit Test Case' : 'New Test Case'}</h2>
 
         <form onSubmit={handleSubmit}>
           <label>

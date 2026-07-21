@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { createSuite } from '../api/suites.js'
+import { useModalA11y } from '../hooks/useModalA11y.js'
 
 const STATUSES = ['draft', 'ready', 'in-progress', 'passed', 'failed']
 
@@ -9,6 +10,8 @@ function SuiteFormModal({ onClose, onSaved }) {
   const [status, setStatus] = useState('draft')
   const [error, setError] = useState(null)
   const [saving, setSaving] = useState(false)
+  const modalRef = useRef(null)
+  useModalA11y(modalRef, onClose)
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -32,8 +35,16 @@ function SuiteFormModal({ onClose, onSaved }) {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2>New Suite</h2>
+      <div
+        className="modal"
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="suite-form-modal-title"
+        tabIndex={-1}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2 id="suite-form-modal-title">New Suite</h2>
 
         <form onSubmit={handleSubmit}>
           <label>
