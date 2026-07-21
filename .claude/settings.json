@@ -24,6 +24,15 @@
             "command": "/Users/yeldanaaliyeva/Documents/bootcamp-app/.claude/hooks/check-severity-enum.sh"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/yeldanaaliyeva/Documents/bootcamp-app/.claude/hooks/detect-flaky-tests.sh"
+          }
+        ]
       }
     ]
   }

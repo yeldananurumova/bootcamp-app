@@ -85,6 +85,13 @@ db.exec(`
 `)
 
 db.exec(`
+  CREATE TABLE IF NOT EXISTS flaky_tests (
+    test_case_id INTEGER PRIMARY KEY REFERENCES test_cases(id) ON DELETE CASCADE,
+    first_detected_at TEXT NOT NULL
+  )
+`)
+
+db.exec(`
   CREATE TABLE IF NOT EXISTS reports (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     run_id INTEGER NOT NULL REFERENCES test_runs_v2(id) ON DELETE CASCADE,
@@ -417,6 +424,83 @@ if (runSeedCount === 0) {
       })
 
       insertRun()
+    }
+  }
+
+  const testCaseMgmtSuite = db.prepare('SELECT id FROM suites WHERE name = ?').get('Test Case Management Suite')
+
+  if (testCaseMgmtSuite) {
+    const tcmCases = db
+      .prepare('SELECT test_case_id, sort_order FROM suite_test_cases WHERE suite_id = ? ORDER BY sort_order ASC')
+      .all(testCaseMgmtSuite.id)
+
+    if (tcmCases.length > 0) {
+      const now = Date.now()
+      const minutesAgo = (n) => new Date(now - n * 60000).toISOString()
+
+      function seedCompletedRun(resultsByTestCaseId, startAgo, endAgo) {
+        const counts = { passed: 0, failed: 0, skipped: 0 }
+        const insertResult = db.prepare(`
+          INSERT INTO test_run_results (run_id, test_case_id, result, notes, failed_at, sort_order)
+          VALUES (@run_id, @test_case_id, @result, @notes, @failed_at, @sort_order)
+        `)
+
+        const insert = db.transaction(() => {
+          const runInfo = db
+            .prepare(`
+              INSERT INTO test_runs_v2 (suite_id, status, pass_count, fail_count, skip_count, start_time, end_time, created_by)
+              VALUES (@suite_id, 'completed', 0, 0, 0, @start_time, @end_time, @created_by)
+            `)
+            .run({
+              suite_id: testCaseMgmtSuite.id,
+              start_time: minutesAgo(startAgo),
+              end_time: minutesAgo(endAgo),
+              created_by: 'local-user',
+            })
+          const runId = runInfo.lastInsertRowid
+
+          tcmCases.forEach((c) => {
+            const seed = resultsByTestCaseId[c.test_case_id] || { result: 'skipped', notes: null, failed: false }
+            counts[seed.result]++
+            insertResult.run({
+              run_id: runId,
+              test_case_id: c.test_case_id,
+              result: seed.result,
+              notes: seed.notes || null,
+              failed_at: seed.failed ? minutesAgo(endAgo - 2) : null,
+              sort_order: c.sort_order,
+            })
+          })
+
+          db.prepare(`
+            UPDATE test_runs_v2 SET pass_count = ?, fail_count = ?, skip_count = ? WHERE id = ?
+          `).run(counts.passed, counts.failed, counts.skipped, runId)
+        })
+
+        insert()
+      }
+
+      // Two runs of the same suite with a flipped result for "Filter test cases
+      // by status" — a test case that passed once and failed once, giving the
+      // flaky-test detection hook (.claude/hooks/detect-flaky-tests.sh) a
+      // second, freshly-seeded case to catch alongside any flakiness already
+      // present elsewhere in test_run_results.
+      const filterCase = db.prepare('SELECT id FROM test_cases WHERE title = ?').get('Filter test cases by status')
+
+      if (filterCase) {
+        seedCompletedRun({ [filterCase.id]: { result: 'passed', notes: null, failed: false } }, 120, 100)
+        seedCompletedRun(
+          {
+            [filterCase.id]: {
+              result: 'failed',
+              notes: 'Failed intermittently — the filter dropdown did not narrow the table on first render.',
+              failed: true,
+            },
+          },
+          20,
+          5
+        )
+      }
     }
   }
 }
