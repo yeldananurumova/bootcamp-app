@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: verity
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: GITHUB_ISSUES_REPO
+        sync: false
