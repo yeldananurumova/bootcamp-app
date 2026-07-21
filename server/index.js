@@ -19,6 +19,7 @@ const PORT = process.env.PORT || 5050
 app.use(cors())
 app.use(express.json())
 
+// Simple liveness check used by the dev workflow and CI smoke tests.
 app.get('/api/health', (req, res) => {
   res.json({ success: true, data: { status: 'ok' }, error: null })
 })
