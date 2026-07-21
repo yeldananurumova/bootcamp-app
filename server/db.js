@@ -73,6 +73,18 @@ db.exec(`
 `)
 
 db.exec(`
+  CREATE TABLE IF NOT EXISTS user_preferences (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    theme TEXT NOT NULL CHECK (theme IN ('light', 'dark', 'system')),
+    default_severity_for_new_bugs TEXT NOT NULL CHECK (default_severity_for_new_bugs IN ('Critical', 'Major', 'Minor', 'Trivial')),
+    default_page_size INTEGER NOT NULL CHECK (default_page_size IN (10, 20, 50, 100)),
+    timezone TEXT NOT NULL,
+    auto_generate_report_after_run INTEGER NOT NULL CHECK (auto_generate_report_after_run IN (0, 1)),
+    updated_at TEXT NOT NULL
+  )
+`)
+
+db.exec(`
   CREATE TABLE IF NOT EXISTS reports (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     run_id INTEGER NOT NULL REFERENCES test_runs_v2(id) ON DELETE CASCADE,
@@ -458,6 +470,15 @@ if (reportSeedCount === 0) {
       generated_at: new Date().toISOString(),
     })
   }
+}
+
+const preferencesSeedCount = db.prepare('SELECT COUNT(*) AS count FROM user_preferences').get().count
+
+if (preferencesSeedCount === 0) {
+  db.prepare(`
+    INSERT INTO user_preferences (theme, default_severity_for_new_bugs, default_page_size, timezone, auto_generate_report_after_run, updated_at)
+    VALUES ('system', 'Minor', 20, '', 1, ?)
+  `).run(new Date().toISOString())
 }
 
 export default db

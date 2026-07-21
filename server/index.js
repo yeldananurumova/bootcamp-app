@@ -9,6 +9,7 @@ import bugsRouter from './routes/bugs.js'
 import testRunsRouter from './routes/test-runs.js'
 import dashboardRouter from './routes/dashboard.js'
 import reportsRouter from './routes/reports.js'
+import settingsRouter from './routes/settings.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 dotenv.config({ path: path.join(__dirname, '..', '.env') })
@@ -17,7 +18,7 @@ const app = express()
 const PORT = process.env.PORT || 5050
 
 app.use(cors())
-app.use(express.json())
+app.use(express.json({ limit: '2mb' }))
 
 app.get('/api/health', (req, res) => {
   res.json({ success: true, data: { status: 'ok' }, error: null })
@@ -29,6 +30,16 @@ app.use('/api/bugs', bugsRouter)
 app.use('/api/test-runs', testRunsRouter)
 app.use('/api/dashboard', dashboardRouter)
 app.use('/api/reports', reportsRouter)
+app.use('/api/settings', settingsRouter)
+
+if (process.env.NODE_ENV === 'production') {
+  const clientDist = path.join(__dirname, '..', 'client', 'dist')
+  app.use(express.static(clientDist))
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api/')) return next()
+    res.sendFile(path.join(clientDist, 'index.html'))
+  })
+}
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

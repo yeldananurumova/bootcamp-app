@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { createBug, updateBug } from '../api/bugs.js'
+import { useSettings } from '../context/SettingsContext.jsx'
+import { useModalA11y } from '../hooks/useModalA11y.js'
 
 const SEVERITIES = ['Critical', 'Major', 'Minor', 'Trivial']
 const PRIORITIES = ['Urgent', 'High', 'Medium', 'Low']
 
-function toFormState(bug) {
+function toFormState(bug, defaultSeverity) {
   return {
     title: bug?.title || '',
     description: bug?.description || '',
@@ -12,15 +14,18 @@ function toFormState(bug) {
     expected: bug?.expected || '',
     actual: bug?.actual || '',
     environment: bug?.environment || '',
-    severity: bug?.severity || '',
+    severity: bug?.severity || defaultSeverity || '',
     priority: bug?.priority || 'Medium',
   }
 }
 
 function BugFormModal({ bug, onClose, onSaved }) {
   const isEdit = Boolean(bug)
-  const [form, setForm] = useState(() => toFormState(bug))
+  const { settings } = useSettings()
+  const [form, setForm] = useState(() => toFormState(bug, settings?.defaultSeverityForNewBugs))
   const [error, setError] = useState(null)
+  const modalRef = useRef(null)
+  useModalA11y(modalRef, onClose)
   const [saving, setSaving] = useState(false)
 
   function update(field, value) {
@@ -76,8 +81,16 @@ function BugFormModal({ bug, onClose, onSaved }) {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2>{isEdit ? 'Edit Bug' : 'New Bug'}</h2>
+      <div
+        className="modal"
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="bug-form-modal-title"
+        tabIndex={-1}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2 id="bug-form-modal-title">{isEdit ? 'Edit Bug' : 'New Bug'}</h2>
 
         <form onSubmit={handleSubmit}>
           <label>
