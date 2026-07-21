@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import db from '../db.js'
+import { parseTestCaseCsv } from '../lib/test-case-csv-import.js'
 
 const SEVERITIES = ['Critical', 'Major', 'Minor', 'Trivial']
 const STATUSES = ['draft', 'ready', 'passed', 'failed', 'skipped']
@@ -176,10 +177,77 @@ function handleDeleteTestCase(req, res) {
   ok(res, { id: Number(req.params.id) })
 }
 
+function handlePreviewTestCaseImport(req, res) {
+  const { csvText } = req.body
+  if (typeof csvText !== 'string' || !csvText.trim()) return fail(res, 400, 'csvText is required')
+
+  const result = parseTestCaseCsv(csvText, validateTestCase)
+  if (result.error) return fail(res, 400, result.error)
+
+  const validCount = result.rows.filter((r) => r.errors.length === 0).length
+  ok(res, {
+    totalRows: result.rows.length,
+    validCount,
+    invalidCount: result.rows.length - validCount,
+    blankRowCount: result.blankRowCount,
+    ignoredColumns: result.ignoredColumns,
+    rows: result.rows,
+  })
+}
+
+function handleImportTestCases(req, res) {
+  const { csvText } = req.body
+  if (typeof csvText !== 'string' || !csvText.trim()) return fail(res, 400, 'csvText is required')
+
+  const result = parseTestCaseCsv(csvText, validateTestCase)
+  if (result.error) return fail(res, 400, result.error)
+
+  const now = new Date().toISOString()
+  const insertStmt = db.prepare(`
+    INSERT INTO test_cases (title, preconditions, steps_json, expected_result, severity, status, created_at, updated_at)
+    VALUES (@title, @preconditions, @steps_json, @expected_result, @severity, @status, @created_at, @updated_at)
+  `)
+
+  const imported = []
+  const skipped = []
+
+  const runImport = db.transaction((rows) => {
+    for (const row of rows) {
+      if (row.errors.length > 0) {
+        skipped.push({ rowNumber: row.rowNumber, title: row.title || null, errors: row.errors })
+        continue
+      }
+      const info = insertStmt.run({
+        title: row.title,
+        preconditions: row.preconditions,
+        steps_json: JSON.stringify(row.steps),
+        expected_result: row.expectedResult,
+        severity: row.severity,
+        status: row.status,
+        created_at: now,
+        updated_at: now,
+      })
+      imported.push({ rowNumber: row.rowNumber, id: info.lastInsertRowid, title: row.title })
+    }
+  })
+
+  runImport(result.rows)
+
+  ok(res, {
+    importedCount: imported.length,
+    skippedCount: skipped.length,
+    blankRowCount: result.blankRowCount,
+    imported,
+    skipped,
+  })
+}
+
 router.get('/', handleListTestCases)
 router.get('/:id', handleGetTestCase)
 router.post('/', handleCreateTestCase)
 router.put('/:id', handleUpdateTestCase)
 router.delete('/:id', handleDeleteTestCase)
+router.post('/import/preview', handlePreviewTestCaseImport)
+router.post('/import', handleImportTestCases)
 
 export default router

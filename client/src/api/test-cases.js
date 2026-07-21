@@ -38,6 +38,22 @@ export function deleteTestCase(id) {
   return request(`${BASE_URL}/${id}`, { method: 'DELETE' })
 }
 
+export function previewTestCaseImport(csvText) {
+  return request(`${BASE_URL}/import/preview`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ csvText }),
+  })
+}
+
+export function importTestCases(csvText) {
+  return request(`${BASE_URL}/import`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ csvText }),
+  })
+}
+
 const MAX_PAGES = 1000
 
 export async function listAllTestCases() {
