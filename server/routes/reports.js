@@ -178,7 +178,8 @@ function buildReportHtml(report) {
     font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
     background: #f7f6f4;
     color: #22252a;
-    padding: 2rem;
+    line-height: 1.6;
+    padding: 2.5rem;
   }
   .report {
     max-width: 900px;
@@ -186,13 +187,19 @@ function buildReportHtml(report) {
     background: #ffffff;
     border: 1px solid #e2e4e8;
     border-radius: 8px;
-    padding: 2rem;
+    padding: 2.5rem;
   }
-  h1 { margin: 0 0 0.25rem; }
+  h1 {
+    margin: 0 0 0.25rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
   .meta { color: #6b7280; margin: 0 0 1.5rem; }
   .metric-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
     gap: 1rem;
     margin-bottom: 2rem;
   }
@@ -200,25 +207,27 @@ function buildReportHtml(report) {
     background: #f7f6f4;
     border: 1px solid #e2e4e8;
     border-radius: 8px;
-    padding: 1rem;
+    padding: 1.25rem;
   }
   .metric-label {
     color: #6b7280;
     font-size: 0.8rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
     margin: 0 0 0.4rem;
   }
   .metric-value { font-size: 1.5rem; font-weight: 700; margin: 0; }
   table { width: 100%; border-collapse: collapse; }
   th, td {
     text-align: left;
-    padding: 0.6rem 0.75rem;
+    padding: 0.7rem 0.85rem;
     border-bottom: 1px solid #eef0f2;
     font-size: 0.9rem;
+    line-height: 1.4;
     vertical-align: top;
   }
-  th { color: #6b7280; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.03em; }
+  th { color: #6b7280; text-transform: uppercase; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; }
   .badge {
     display: inline-block;
     padding: 0.15rem 0.6rem;
