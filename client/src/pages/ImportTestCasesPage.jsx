@@ -132,6 +132,7 @@ function ImportTestCasesPage() {
             <p className="form-error">Ignored unrecognized column(s): {previewData.ignoredColumns.join(', ')}</p>
           )}
 
+          <div className="table-scroll">
           <table className="test-cases-table import-preview-table">
             <thead>
               <tr>
@@ -152,6 +153,7 @@ function ImportTestCasesPage() {
               <ErrorRows rows={previewData.rows} columns={6} />
             </tbody>
           </table>
+          </div>
 
           <div className="add-case-row">
             <button onClick={reset}>Choose a different file</button>
@@ -184,6 +186,7 @@ function ImportTestCasesPage() {
           {resultData.skipped.length > 0 && (
             <>
               <h2>Skipped Rows</h2>
+              <div className="table-scroll">
               <table className="test-cases-table import-preview-table">
                 <thead>
                   <tr>
@@ -213,6 +216,7 @@ function ImportTestCasesPage() {
                   ))}
                 </tbody>
               </table>
+              </div>
             </>
           )}
 

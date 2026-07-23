@@ -140,6 +140,7 @@ function TestCasesPage() {
 
       {error && <p className="form-error">{error}</p>}
 
+      <div className="table-scroll">
       <table className="test-cases-table">
         <thead>
           <tr>
@@ -224,6 +225,7 @@ function TestCasesPage() {
             ))}
         </tbody>
       </table>
+      </div>
 
       <div className="pagination">
         <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>

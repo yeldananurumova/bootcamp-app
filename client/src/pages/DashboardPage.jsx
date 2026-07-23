@@ -135,6 +135,7 @@ function DashboardPage() {
           )}
 
           <h2>Recent Test Runs</h2>
+          <div className="table-scroll">
           <table className="test-cases-table">
             <thead>
               <tr>
@@ -166,6 +167,7 @@ function DashboardPage() {
               ))}
             </tbody>
           </table>
+          </div>
 
           <h2>Recent Activity</h2>
           <ul className="activity-timeline">

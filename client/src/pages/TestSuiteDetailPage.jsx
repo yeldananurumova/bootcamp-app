@@ -167,6 +167,7 @@ function TestSuiteDetailPage() {
       <h2>Cases ({suite.cases.length})</h2>
       <p className="drag-hint">Drag rows to reorder.</p>
 
+      <div className="table-scroll">
       <table className="test-cases-table">
         <thead>
           <tr>
@@ -207,6 +208,7 @@ function TestSuiteDetailPage() {
           ))}
         </tbody>
       </table>
+      </div>
 
       <div className="add-case-row">
         <select

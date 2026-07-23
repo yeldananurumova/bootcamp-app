@@ -42,6 +42,7 @@ function ReportsPage() {
       {loading && <p>Loading...</p>}
 
       {!loading && (
+        <div className="table-scroll">
         <table className="test-cases-table">
           <thead>
             <tr>
@@ -75,6 +76,7 @@ function ReportsPage() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   )

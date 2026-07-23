@@ -96,6 +96,21 @@ body {
     sans-serif;
   background: var(--bg-page);
   color: var(--text-primary);
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.3;
 }
 
 a {
@@ -116,8 +131,9 @@ a:hover {
 
 .top-nav {
   display: flex;
-  gap: 1.5rem;
-  padding: 1rem 2rem;
+  flex-wrap: wrap;
+  gap: 1.75rem;
+  padding: 1.1rem 2rem;
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border-color);
 }
@@ -150,15 +166,16 @@ a:hover {
 .test-cases-page {
   max-width: 960px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2.5rem;
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .page-header h1 {
@@ -193,6 +210,7 @@ button:disabled {
 
 .toolbar {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
   margin-bottom: 1rem;
 }
@@ -221,6 +239,10 @@ button:disabled {
   flex: 1;
 }
 
+.table-scroll {
+  overflow-x: auto;
+}
+
 .test-cases-table {
   width: 100%;
   border-collapse: collapse;
@@ -233,7 +255,8 @@ button:disabled {
 .test-cases-table th,
 .test-cases-table td {
   text-align: left;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.1rem;
+  line-height: 1.4;
   border-bottom: 1px solid var(--border-color-subtle);
 }
 
@@ -260,8 +283,9 @@ button:disabled {
 .detail-field h3 {
   margin: 0 0 0.35rem;
   font-size: 0.85rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   color: var(--text-muted);
 }
 
@@ -287,6 +311,7 @@ button:disabled {
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: 600;
+  line-height: 1.4;
 }
 
 .row-menu-cell {
@@ -355,7 +380,7 @@ button:disabled {
 .modal {
   background: var(--bg-surface);
   border-radius: 10px;
-  padding: 1.5rem 2rem 2rem;
+  padding: 2rem 2.5rem 2.5rem;
   width: 480px;
   max-width: 90vw;
   max-height: 85vh;
@@ -500,6 +525,7 @@ button:disabled {
 
 .status-change-form {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
   margin-bottom: 1.5rem;
 }
@@ -560,6 +586,7 @@ button:disabled {
 
 .add-comment-form {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
   align-items: flex-start;
 }
@@ -576,12 +603,13 @@ button:disabled {
 
 .metric-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
 }
 
 .metric-card {
+  min-width: 0;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -591,8 +619,9 @@ button:disabled {
 .metric-label {
   color: var(--text-muted);
   font-size: 0.85rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   margin: 0 0 0.5rem;
 }
 
@@ -627,12 +656,13 @@ button:disabled {
 
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .chart-card {
+  min-width: 0;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -738,7 +768,7 @@ button:disabled {
   font-size: 0.7rem;
   fill: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
 }
 
 .dashboard-empty {
@@ -891,8 +921,9 @@ kbd {
 .quick-search-group h3 {
   margin: 0.5rem 1.25rem 0.25rem;
   font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   color: var(--text-muted);
 }
 

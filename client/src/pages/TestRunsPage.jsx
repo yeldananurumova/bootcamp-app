@@ -43,6 +43,7 @@ function TestRunsPage() {
       {loading && <p>Loading...</p>}
 
       {!loading && (
+        <div className="table-scroll">
         <table className="test-cases-table">
           <thead>
             <tr>
@@ -76,6 +77,7 @@ function TestRunsPage() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   )

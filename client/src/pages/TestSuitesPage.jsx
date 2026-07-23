@@ -65,6 +65,7 @@ function TestSuitesPage() {
 
       {error && <p className="form-error">{error}</p>}
 
+      <div className="table-scroll">
       <table className="test-cases-table">
         <thead>
           <tr>
@@ -108,6 +109,7 @@ function TestSuitesPage() {
             ))}
         </tbody>
       </table>
+      </div>
 
       {showForm && (
         <SuiteFormModal
