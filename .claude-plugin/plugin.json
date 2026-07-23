@@ -1,0 +1,10 @@
+{
+  "name": "verity-qa-toolkit",
+  "description": "Claude Code toolkit for QA workflows: test case generation, bug triage, flaky test detection, and QA review.",
+  "version": "1.0.0",
+  "author": {
+    "name": "ealiyeva",
+    "email": "eldana.aliyeva-ext@lexisnexisrisk.com"
+  },
+  "license": "MIT"
+}

@@ -1,4 +1,5 @@
 {
+  "description": "QA guardrail hooks: block writes to .env files, validate API response shape and severity enums after edits, and flag newly-flaky test results.",
   "hooks": {
     "PreToolUse": [
       {
@@ -6,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/hooks/protect-env.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/protect-env.sh"
           }
         ]
       }
@@ -17,11 +18,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/hooks/check-response-shape.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/check-response-shape.sh"
           },
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/hooks/check-severity-enum.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/check-severity-enum.sh"
           }
         ]
       },
@@ -30,7 +31,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/hooks/detect-flaky-tests.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/detect-flaky-tests.sh"
           }
         ]
       }
