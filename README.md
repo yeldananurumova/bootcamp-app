@@ -2,6 +2,8 @@
 
 A QA test-case, test-suite, bug-tracking, and reporting tool. Express API (`server/`) + React client (`client/`), run together via `npm run dev` at the root.
 
+**Live app:** https://verity-zfa8.onrender.com/
+
 ## Stack
 
 - **Server**: Express + `better-sqlite3` (a local file-based SQLite database, `server/data.sqlite`)
